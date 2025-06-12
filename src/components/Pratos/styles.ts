@@ -53,7 +53,7 @@ export const DivHeader = styled.div`
   margin: 8px;
 
   img {
-    width: 20px;
+    width: 24px;
     margin-left: 8px;
   }
 
