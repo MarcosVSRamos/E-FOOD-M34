@@ -1,9 +1,10 @@
 import Prato from '../../models/Prato'
-import Header from '../../components/Header'
-import PratosList from '../../components/PratosList'
 
 import prato_japones from '../../assets/images/prato_japones.png'
 import macarrao from '../../assets/images/macarrao.png'
+import SecondHeader from '../../components/SecondHeader'
+import hero_italiana from '../../assets/images/hero_italiana.png'
+import Banner from '../../components/Banner'
 
 const listaDePratos: Prato[] = [
   {
@@ -68,11 +69,15 @@ const listaDePratos: Prato[] = [
   }
 ]
 
-const Home = () => (
+const Perfil = () => (
   <>
-    <Header />
-    <PratosList pratos={listaDePratos} />
+    <SecondHeader />
+    <Banner
+      category="italiana"
+      image={hero_italiana}
+      title="La Dolce Vita Trattoria"
+    />
   </>
 )
 
-export default Home
+export default Perfil

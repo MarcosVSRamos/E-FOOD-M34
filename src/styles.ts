@@ -14,7 +14,19 @@ const GlobalCss = createGlobalStyle`
     box-sizing: border-box;
     font-family: Roboto, sans-serif;
     list-style: none;
-    color: ${cores.vermelho};
+    text-decoration: none;
+
+    body {
+      background-color: ${cores.fundoClaro};
+      color: ${cores.vermelho};
+    }
+
+  }
+
+  .container{
+    width: 1024px;
+    max-width: 100%;
+    margin: 0 auto;
   }
 `
 export default GlobalCss

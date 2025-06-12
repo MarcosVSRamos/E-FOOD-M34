@@ -1,5 +1,5 @@
 import Tag from '../Tag'
-import { Card, Descricao, DivHeader, HeaderCard, Img } from './styles'
+import { Card, Descricao, DivHeader, HeaderCard, Img, Infos } from './styles'
 import estrela from '../../assets/images/estrela.png'
 import { ButtonLink } from '../Button/styles'
 
@@ -22,8 +22,10 @@ const Pratos = ({
 }: Props) => (
   <Card>
     <Img src={image} alt={title} />
-    {destaque && <Tag size="small">Destaque da Semana</Tag>}
-    <Tag>{category}</Tag>
+    <Infos>
+      {destaque && <Tag size="small">Destaque da Semana</Tag>}
+      <Tag>{category}</Tag>
+    </Infos>
     <DivHeader>
       <HeaderCard>{title}</HeaderCard>
       <div>
@@ -32,7 +34,7 @@ const Pratos = ({
       </div>
     </DivHeader>
     <Descricao>{description}</Descricao>
-    <ButtonLink type="button" to="/">
+    <ButtonLink type="button" to="/perfil">
       Saiba Mais
     </ButtonLink>
   </Card>
