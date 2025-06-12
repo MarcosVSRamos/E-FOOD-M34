@@ -4,6 +4,7 @@ import { cores } from '../../styles'
 
 export const ButtonContainer = styled.button`
   text-decoration: none;
+  text-align: center;
   list-style: none;
   background-color: ${cores.vermelho};
   color: ${cores.textoSecundario},

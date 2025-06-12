@@ -15,7 +15,7 @@ export const Div = styled.div`
 
 export const Hero = styled.div`
   width: 100%;
-  height: 186px;
+  height: 166px;
   display: block;
   justify-content: center;
   background-repeat: no-repeat;
@@ -23,5 +23,5 @@ export const Hero = styled.div`
 `
 
 export const Img = styled.img`
-  margin: 64px auto;
+  margin: 44px auto;
 `

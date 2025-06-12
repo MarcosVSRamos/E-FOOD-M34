@@ -1,27 +1,33 @@
 class Prato {
   id: number
-  category: string
   description: string
+  tipo: 'addCart' | 'more'
   image: string
   title: string
-  note: number
+  button: string
+  note?: number
+  category?: string
   destaque?: boolean
 
   constructor(
     id: number,
-    category: string,
     description: string,
+    tipo: 'addCart' | 'more',
     image: string,
     title: string,
-    note: number,
+    button: string,
+    note?: number,
+    category?: string,
     destaque?: boolean
   ) {
     this.id = id
-    this.category = category
     this.description = description
+    this.tipo = tipo
     this.image = image
     this.title = title
     this.note = note
+    this.button = button
+    this.category = category
     this.destaque = destaque
   }
 }

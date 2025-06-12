@@ -3,7 +3,7 @@ import { cores } from '../../styles'
 
 export const Hero = styled.div`
   width: 100%;
-  height: 186px;
+  height: 280px;
   display: block;
   background-repeat: no-repeat;
   background-size: cover;
@@ -17,7 +17,7 @@ export const Div = styled.div`
 
 export const Categoria = styled.p`
   padding-top: 18px;
-  padding-bottom: 72px;
+  padding-bottom: 156px;
   font-weight: 100;
   font-size: 32px;
 `
