@@ -1,15 +1,16 @@
+import { ReactNode } from 'react'
 import { ButtonContainer, ButtonLink } from './styles'
 
 type Props = {
-  type: 'button' | 'link'
+  typeButton: 'button' | 'link'
   title: string
   to?: string
   onClick?: () => void
-  children: string
+  children: ReactNode
 }
 
-const Button = ({ type, title, to, onClick, children }: Props) => {
-  if (type === 'button') {
+const Button = ({ typeButton, title, to, onClick, children }: Props) => {
+  if (typeButton === 'button') {
     return (
       <ButtonContainer type="button" title={title} onClick={onClick}>
         {children}

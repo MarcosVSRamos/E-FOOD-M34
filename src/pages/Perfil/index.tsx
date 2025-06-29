@@ -1,80 +1,34 @@
-import Prato from '../../models/Prato'
+import { useEffect, useState } from 'react'
 
 import pizza from '../../assets/images/pizza.png'
 import SecondHeader from '../../components/SecondHeader'
 import hero_italiana from '../../assets/images/hero_italiana.png'
 import Banner from '../../components/Banner'
-import PratosList from '../../components/PratosList'
+import PratosList from '../../components/RestaurantesList'
+import Modal from '../../components/Modal'
+import { Restaurante } from '../Home'
 
-type PratoSemNota = Omit<Prato, 'note' | 'destaque'>
+const Perfil = () => {
+  const [restaurantes, setRestaurantes] = useState<Restaurante[]>([])
 
-const listaDePratos: PratoSemNota[] = [
-  {
-    id: 1,
-    title: 'Pizza Marguerita',
-    tipo: 'addCart',
-    button: 'Adiocinar ao carrinho',
-    description:
-      'A clássica Marguerita: molho de tomate suculento, mussarela derretida, manjericão fresco e um toque de azeite. Sabor e simplicidade!',
-    image: pizza
-  },
-  {
-    id: 2,
-    title: 'Pizza Marguerita',
-    tipo: 'addCart',
-    button: 'Adiocinar ao carrinho',
-    description:
-      'A clássica Marguerita: molho de tomate suculento, mussarela derretida, manjericão fresco e um toque de azeite. Sabor e simplicidade!',
-    image: pizza
-  },
-  {
-    id: 3,
-    title: 'Pizza Marguerita',
-    tipo: 'addCart',
-    button: 'Adiocinar ao carrinho',
-    description:
-      'A clássica Marguerita: molho de tomate suculento, mussarela derretida, manjericão fresco e um toque de azeite. Sabor e simplicidade!',
-    image: pizza
-  },
-  {
-    id: 4,
-    title: 'Pizza Marguerita',
-    tipo: 'addCart',
-    button: 'Adiocinar ao carrinho',
-    description:
-      'A clássica Marguerita: molho de tomate suculento, mussarela derretida, manjericão fresco e um toque de azeite. Sabor e simplicidade!',
-    image: pizza
-  },
-  {
-    id: 5,
-    title: 'Pizza Marguerita',
-    tipo: 'addCart',
-    button: 'Adiocinar ao carrinho',
-    description:
-      'A clássica Marguerita: molho de tomate suculento, mussarela derretida, manjericão fresco e um toque de azeite. Sabor e simplicidade!',
-    image: pizza
-  },
-  {
-    id: 6,
-    title: 'Pizza Marguerita',
-    tipo: 'addCart',
-    button: 'Adiocinar ao carrinho',
-    description:
-      'A clássica Marguerita: molho de tomate suculento, mussarela derretida, manjericão fresco e um toque de azeite. Sabor e simplicidade!',
-    image: pizza
-  }
-]
+  useEffect(() => {
+    fetch('https://fake-api-tau.vercel.app/api/efood/restaurantes')
+      .then((res) => res.json())
+      .then((res) => setRestaurantes(res))
+  }, [])
 
-const Perfil = () => (
-  <>
-    <SecondHeader />
-    <Banner
-      category="italiana"
-      image={hero_italiana}
-      title="La Dolce Vita Trattoria"
-    />
-    <PratosList typeList="addCart" pratos={listaDePratos} />
-  </>
-)
+  return (
+    <>
+      <SecondHeader />
+      <Banner
+        category="italiana"
+        image={hero_italiana}
+        title="La Dolce Vita Trattoria"
+      />
+      <PratosList pratos={restaurantes} />
+      <Modal />
+    </>
+  )
+}
 
 export default Perfil

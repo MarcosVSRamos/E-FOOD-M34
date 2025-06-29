@@ -7,7 +7,7 @@ export const ButtonContainer = styled.button`
   text-align: center;
   list-style: none;
   background-color: ${cores.vermelho};
-  color: ${cores.textoSecundario},
+  color: ${cores.textoSecundario};
   font-size: 16px;
   font-weight: bold;
   padding: 4px 6px;
