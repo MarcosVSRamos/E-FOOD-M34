@@ -15,11 +15,11 @@ import { useState } from 'react'
 type Props = {
   id: number
   titulo: string
-  tipo: string
-  destacado: boolean
+  tipo?: string
+  destacado?: boolean
   descricao: string
   capa: string
-  avaliacao: number
+  avaliacao?: number
 }
 
 const Pratos = ({
@@ -55,7 +55,7 @@ const Pratos = ({
         )}
       </DivHeader>
       <Descricao>{getDescricao(descricao)}</Descricao>
-      <ButtonLink type="button" to="/perfil">
+      <ButtonLink type="button" to={`/perfil/${id}`}>
         Saiba mais
       </ButtonLink>
     </Card>

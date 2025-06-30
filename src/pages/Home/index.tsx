@@ -7,6 +7,15 @@ export interface RestauranteItens {
   url: string
 }
 
+export type Prato = {
+  id: number
+  nome: string
+  descricao: string
+  foto: string
+  preco: number
+  porcao: string
+}
+
 export type Restaurante = {
   id: number
   titulo: string
@@ -15,14 +24,7 @@ export type Restaurante = {
   avaliacao: number
   descricao: string
   capa: string
-  cardapio: {
-    foto: string
-    preco: number
-    id: number
-    nome: string
-    descricao: string
-    porcao: string
-  }
+  cardapio: Prato[]
 }
 
 const Home = () => {
