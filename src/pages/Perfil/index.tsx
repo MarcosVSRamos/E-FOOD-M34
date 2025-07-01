@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react'
 import SecondHeader from '../../components/SecondHeader'
 import Banner from '../../components/Banner'
 import PratosList from '../../components/PratosList'
-import Modal from '../../components/Modal'
 import { Restaurante } from '../Home'
 import { useParams } from 'react-router-dom'
 
@@ -30,8 +29,11 @@ const Perfil = () => {
         image={cardapio.capa}
         title={cardapio.titulo}
       />
-      <PratosList pratos={cardapio.cardapio} />
-      <Modal />
+      <PratosList
+        pratos={cardapio.cardapio}
+        name={cardapio.titulo}
+        defaultCover={cardapio.capa}
+      />
     </>
   )
 }

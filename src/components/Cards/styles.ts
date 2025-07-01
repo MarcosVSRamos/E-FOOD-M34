@@ -3,13 +3,27 @@ import { cores } from '../../styles'
 import { TagContainer } from '../Tag/sytles'
 import { ButtonLink } from '../Button/styles'
 
-export const Card = styled.div`
-  background-color: ${cores.fundoClaro};
+type CardProps = {
+  restauranteOuPrato: 'restaurante' | 'prato'
+}
+
+export const Card = styled('div').withConfig({
+  shouldForwardProp: (prop) => prop !== 'restauranteOuPrato'
+})<CardProps>`
+  background-color: ${({ restauranteOuPrato }) =>
+    restauranteOuPrato === 'restaurante' ? cores.fundoClaro : cores.vermelho};
   color: ${cores.vermelho};
   width: 472px;
   height: 398px;
   max-width: 100%;
-  border: solid 1px ${cores.vermelho};
+  border: ${({ restauranteOuPrato }) =>
+    restauranteOuPrato === 'restaurante'
+      ? `solid 1px ${cores.vermelho}`
+      : 'none'};
+  color: ${({ restauranteOuPrato }) =>
+    restauranteOuPrato === 'restaurante'
+      ? cores.vermelho
+      : cores.textoSecundario};
   margin-bottom: 40px;
   position: relative;
 
@@ -24,6 +38,19 @@ export const Card = styled.div`
   }
 `
 
+export const AddToCard = styled.button`
+  border: none;
+  background-color: ${cores.textoSecundario};
+  color: ${cores.vermelho};
+  width: 304px;
+  height: 24px;
+  font-size: 14px;
+  text-align: center;
+  font-weight: bold;
+  margin: 8px;
+  cursor: pointer;
+`
+
 export const Img = styled.img`
   width: 100%;
   height: 218px;
@@ -35,18 +62,6 @@ export const Infos = styled.div`
   position: absolute;
   top: 16px;
   right: 8px;
-`
-
-export const BotaoModal = styled.button`
-  background-color: ${cores.textoSecundario};
-  color: ${cores.vermelho};
-  font-size: 16px;
-  font-weight: bold;
-  padding: 2px 74px;
-  margin: 8px;
-  border: none;
-  cursor: pointer;
-  width: 304px;
 `
 
 export const DivHeader = styled.div`

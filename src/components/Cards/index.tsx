@@ -1,6 +1,6 @@
 import Tag from '../Tag'
 import {
-  BotaoModal,
+  AddToCard,
   Card,
   Descricao,
   DivHeader,
@@ -10,12 +10,13 @@ import {
 } from './styles'
 import estrela from '../../assets/images/estrela.png'
 import { ButtonLink } from '../Button/styles'
-import { useState } from 'react'
 
 type Props = {
   id: number
+  restauranteOuPrato: 'restaurante' | 'prato'
   titulo: string
   tipo?: string
+  onClickModal?: () => void
   destacado?: boolean
   descricao: string
   capa: string
@@ -24,14 +25,19 @@ type Props = {
 
 const Pratos = ({
   id,
+  restauranteOuPrato,
   titulo,
   tipo,
+  onClickModal,
   descricao,
   avaliacao,
   destacado,
   capa
 }: Props) => {
   const getDescricao = (description: string) => {
+    if (restauranteOuPrato === 'prato') {
+      return description.slice(0, 172) + '...'
+    }
     if (description.length > 245) {
       return description.slice(0, 242) + '...'
     }
@@ -39,12 +45,14 @@ const Pratos = ({
   }
 
   return (
-    <Card id={`${id}`}>
+    <Card id={`${id}`} restauranteOuPrato={restauranteOuPrato}>
       <Img src={capa} alt={titulo} />
-      <Infos>
-        {destacado && <Tag size="small">Destaque da Semana</Tag>}
-        <Tag>{tipo}</Tag>
-      </Infos>
+      {tipo && (
+        <Infos>
+          {destacado && <Tag size="small">Destaque da Semana</Tag>}
+          <Tag>{tipo}</Tag>
+        </Infos>
+      )}
       <DivHeader>
         <HeaderCard>{titulo}</HeaderCard>
         {avaliacao && (
@@ -55,9 +63,15 @@ const Pratos = ({
         )}
       </DivHeader>
       <Descricao>{getDescricao(descricao)}</Descricao>
-      <ButtonLink type="button" to={`/perfil/${id}`}>
-        Saiba mais
-      </ButtonLink>
+      {restauranteOuPrato === 'restaurante' ? (
+        <ButtonLink type="button" to={`/perfil/${id}`}>
+          Saiba mais
+        </ButtonLink>
+      ) : (
+        <AddToCard type="button" onClick={onClickModal}>
+          Adicionar ao carrinho
+        </AddToCard>
+      )}
     </Card>
   )
 }

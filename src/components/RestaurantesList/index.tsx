@@ -14,6 +14,7 @@ const RestaurantesList = ({ pratos }: Props) => (
           <li key={prato.id}>
             <Pratos
               id={prato.id}
+              restauranteOuPrato="restaurante"
               tipo={prato.tipo}
               descricao={prato.descricao}
               capa={prato.capa}

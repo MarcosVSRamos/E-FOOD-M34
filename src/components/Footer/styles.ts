@@ -7,6 +7,7 @@ export const Div = styled.div`
   justify-content: center;
   align-items: center;
   text-align: center;
+  margin-top: 40px;
   background-color: ${cores.textoSecundario};
 `
 
