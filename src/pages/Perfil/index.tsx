@@ -29,11 +29,7 @@ const Perfil = () => {
         image={cardapio.capa}
         title={cardapio.titulo}
       />
-      <PratosList
-        pratos={cardapio.cardapio}
-        name={cardapio.titulo}
-        defaultCover={cardapio.capa}
-      />
+      <PratosList pratos={cardapio.cardapio} name={cardapio.titulo} />
     </>
   )
 }

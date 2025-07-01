@@ -7,7 +7,6 @@ import { BuyButton, Card, ImgModal, List, Modal, ModalContent } from './styles'
 type Props = {
   name: string
   pratos: Prato[]
-  defaultCover: string
 }
 
 export const formataPreco = (preco = 0) => {
@@ -22,7 +21,7 @@ interface ModalState {
   prato?: Prato
 }
 
-const PratosList = ({ pratos, name, defaultCover }: Props) => {
+const PratosList = ({ pratos, name }: Props) => {
   const [modal, setModal] = useState<ModalState>({
     isVisible: false
   })
