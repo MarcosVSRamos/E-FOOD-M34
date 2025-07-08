@@ -1,7 +1,6 @@
 import Header from '../../components/Header'
 import PratosList from '../../components/RestaurantesList'
-
-import { useEffect, useState } from 'react'
+import { useGetRestaurantesQuery } from '../../services/api'
 
 export interface RestauranteItens {
   url: string
@@ -28,18 +27,23 @@ export type Restaurante = {
 }
 
 const Home = () => {
-  const [restaurantes, setRestaurantes] = useState<Restaurante[]>([])
+  // const [restaurantes, setRestaurantes] = useState<Restaurante[]>([])
 
-  useEffect(() => {
-    fetch('https://fake-api-tau.vercel.app/api/efood/restaurantes')
-      .then((res) => res.json())
-      .then((res) => setRestaurantes(res))
-  }, [])
+  // useEffect(() => {
+  //   fetch('https://fake-api-tau.vercel.app/api/efood/restaurantes')
+  //     .then((res) => res.json())
+  //     .then((res) => setRestaurantes(res))
+  // }, [])
 
+  const { data: listaRestaurantes } = useGetRestaurantesQuery()
+
+  if (!listaRestaurantes) {
+    return <h4>Carregando...</h4>
+  }
   return (
     <>
       <Header />
-      <PratosList pratos={restaurantes} />
+      <PratosList pratos={listaRestaurantes} />
     </>
   )
 }
