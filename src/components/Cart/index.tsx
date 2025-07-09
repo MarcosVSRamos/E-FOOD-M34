@@ -26,7 +26,7 @@ const Cart = () => {
 
   return (
     <CardContainer className={isOpen ? 'is-open' : ''}>
-      <Overlay />
+      <Overlay onClick={closeCart} />
       <SideBar>
         <ul>
           {items.map((item) => (
@@ -41,7 +41,7 @@ const Cart = () => {
           ))}
         </ul>
         <Prices>
-          Valor Total <span>{formataPreco(getValorTotal())}</span>
+          <p>Valor Total</p> <span>{formataPreco(getValorTotal())}</span>
         </Prices>
         <Button title="Continuar com a entrega" typeButton="button">
           Continuar com a entrega

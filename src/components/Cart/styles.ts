@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import { ButtonContainer, ButtonLink } from '../Button/styles'
 import { cores } from '../../styles'
-import fechar from '../../assets/images/fechar.png'
+import fechar from '../../assets/images/lixeira-de-reciclagem 1.png'
 
 export const CardContainer = styled.div`
   position: fixed;
@@ -21,17 +21,17 @@ export const CardContainer = styled.div`
 export const SideBar = styled.aside`
   background-color: ${cores.vermelho};
   z-index: 1;
-  padding: 40px 16px 0 16px;
+  padding: 36px 16px 0 16px;
   max-width: 360px;
   width: 100%;
 
   ${ButtonContainer} {
     max-width: 100%;
     width: 100%;
-  }
-
-  ${ButtonLink} {
-    margin: none;
+    border: none;
+    margin: 0;
+    color: ${cores.vermelho};
+    background-color: ${cores.textoSecundario};
   }
 `
 
@@ -45,35 +45,38 @@ export const Overlay = styled.div`
   opacity: 0.7;
 `
 
-export const Prices = styled.p`
+export const Prices = styled.div`
   font-weight: bold;
   font-size: 14px;
-  margin-bottom: 24px;
+  margin-bottom: 16px;
+  margin-top: 32px;
   display: flex;
-  justify-content: space-betten;
+  justify-content: space-between;
+  color: ${cores.textoSecundario};
 `
 
 export const CartItem = styled.li`
   display: flex;
-  background-color: ${cores.fundoClaro};
+  background-color: ${cores.textoSecundario};
   padding: 8px 0;
+  margin: 8px 0;
   position: relative;
 
   img {
-    widht: 80px;
+    width: 80px;
     height: 80px;
+    margin: 0 8px;
     object-fit: cover;
-    margin-right: 24px;
   }
 
   h3 {
     font-weight: bold;
-    font-size: 16px;
+    font-size: 18px;
+    margin-bottom: 16px;
   }
 
   span {
     display: block;
-    font-weight: bold;
     font-size: 14px;
   }
 
@@ -85,7 +88,7 @@ export const CartItem = styled.li`
     background-color: transparent;
     cursor: pointer;
     position: absolute;
-    top: 8px;
-    right: 0;
+    bottom: 8px;
+    right: 8px;
   }
 `
