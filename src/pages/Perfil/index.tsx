@@ -1,21 +1,22 @@
-import { useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom'
 
 import SecondHeader from '../../components/SecondHeader'
 import Banner from '../../components/Banner'
 import PratosList from '../../components/PratosList'
-import { Restaurante } from '../Home'
-import { useParams } from 'react-router-dom'
+import { useGetCardapioQuery } from '../../services/api'
 
 const Perfil = () => {
-  const { id } = useParams<{ id: string }>()
+  const { id } = useParams()
 
-  const [cardapio, setCardapio] = useState<Restaurante>()
+  const { data: cardapio } = useGetCardapioQuery(id!)
 
-  useEffect(() => {
-    fetch(`https://fake-api-tau.vercel.app/api/efood/restaurantes/${id}`)
-      .then((res) => res.json())
-      .then((res) => setCardapio(res))
-  }, [id])
+  // const [cardapio, setCardapio] = useState<Restaurante>()
+
+  // useEffect(() => {
+  //   fetch(`https://fake-api-tau.vercel.app/api/efood/restaurantes/${id}`)
+  //     .then((res) => res.json())
+  //     .then((res) => setCardapio(res))
+  // }, [id])
 
   if (!cardapio) {
     return <h3>Carregando...</h3>

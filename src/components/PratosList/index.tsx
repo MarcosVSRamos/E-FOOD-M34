@@ -1,8 +1,10 @@
+import { useDispatch } from 'react-redux'
 import { useState } from 'react'
 import { Prato } from '../../pages/Home'
 import Pratos from '../Cards'
 import fechar from '../../assets/images/fechar.png'
 import { BuyButton, Card, ImgModal, List, Modal, ModalContent } from './styles'
+import { add, open } from '../../store/reducers/cart'
 
 type Props = {
   name: string
@@ -22,9 +24,18 @@ interface ModalState {
 }
 
 const PratosList = ({ pratos, name }: Props) => {
+  const dispatch = useDispatch()
+
   const [modal, setModal] = useState<ModalState>({
     isVisible: false
   })
+
+  const addToCard = () => {
+    if (modal.prato) {
+      dispatch(add(modal.prato))
+      dispatch(open())
+    }
+  }
 
   const closeModal = () => {
     setModal({
@@ -73,7 +84,9 @@ const PratosList = ({ pratos, name }: Props) => {
               <h4>{name}</h4>
               <p>{modal.prato?.descricao}</p>
               <span>{`porção para ${modal.prato?.porcao}`}</span>
-              <BuyButton>{`Adicionar ao carrinho - ${formataPreco(
+              <BuyButton
+                onClick={addToCard}
+              >{`Adicionar ao carrinho - ${formataPreco(
                 modal.prato?.preco
               )}`}</BuyButton>
             </div>

@@ -1,25 +1,15 @@
 import { Link, useParams } from 'react-router-dom'
-import { useEffect, useState } from 'react'
 
 import fundo_hero from '../../assets/images/fundo_hero.png'
 import logo from '../../assets/images/logo.png'
 import { Div, Hero, Img } from './styles'
-import { Restaurante } from '../../pages/Home'
+import { useGetBannerQuery } from '../../services/api'
 
 const SecondHeader = () => {
-  const { id } = useParams<{ id: string }>()
+  const { id } = useParams()
 
-  const [cardapio, setCardapio] = useState<Restaurante>()
+  const { data: cardapio } = useGetBannerQuery(id!)
 
-  useEffect(() => {
-    fetch(`https://fake-api-tau.vercel.app/api/efood/restaurantes/${id}`)
-      .then((res) => res.json())
-      .then((res) => setCardapio(res))
-  }, [id])
-
-  if (!cardapio) {
-    return <h3>Carregando...</h3>
-  }
   return (
     <Hero style={{ backgroundImage: `url(${fundo_hero})` }}>
       <Div className="container">
