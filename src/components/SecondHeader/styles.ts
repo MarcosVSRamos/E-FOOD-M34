@@ -13,6 +13,10 @@ export const Div = styled.div`
     padding-right: 64px;
   }
 
+  p {
+    cursor: pointer;
+  }
+
   @media (max-width: ${breakpoints.tablet}) {
     max-width: 95%;
     padding-top: 18px;

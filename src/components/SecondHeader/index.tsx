@@ -5,13 +5,18 @@ import logo from '../../assets/images/logo.png'
 import { Div, Hero, Img } from './styles'
 import { useGetBannerQuery } from '../../services/api'
 import { RootReducer } from '../../store'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { open } from '../../store/reducers/cart'
 
 const SecondHeader = () => {
   const { id } = useParams()
+  const dispatch = useDispatch()
+
+  const openCart = () => {
+    dispatch(open())
+  }
 
   const { items } = useSelector((state: RootReducer) => state.cart)
-
   const { data: cardapio } = useGetBannerQuery(id!)
 
   return (
@@ -21,7 +26,7 @@ const SecondHeader = () => {
         <Link to="/">
           <Img src={logo} />
         </Link>
-        <p>
+        <p onClick={openCart}>
           <span>{items.length}</span> produto(s) no carrinho
         </p>
       </Div>
