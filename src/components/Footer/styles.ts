@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { cores } from '../../styles'
+import { breakpoints, cores } from '../../styles'
 
 export const Div = styled.div`
   display: flex;
@@ -17,6 +17,11 @@ export const Paragrafo = styled.p`
   font-size: 10px;
   margin-top: 80px;
   margin-bottom: 40px;
+
+  @media (max-width: ${breakpoints.tablet}) {
+    font-size: 12px;
+    margin-top: 40px;
+  }
 `
 
 export const DivSocial = styled.div`

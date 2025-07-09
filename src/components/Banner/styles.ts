@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { cores } from '../../styles'
+import { breakpoints, cores } from '../../styles'
 
 export const Hero = styled.div`
   width: 100%;
@@ -20,10 +20,18 @@ export const Categoria = styled.p`
   padding-bottom: 156px;
   font-weight: 100;
   font-size: 32px;
+
+  @media (max-width: ${breakpoints.tablet}) {
+    margin-left: 24px;
+  }
 `
 
 export const Titulo = styled.h1`
   font-size: 32px;
   font-weight: bold;
   padding-bottom: 32px;
+
+  @media (max-width: ${breakpoints.tablet}) {
+    margin-left: 24px;
+  }
 `

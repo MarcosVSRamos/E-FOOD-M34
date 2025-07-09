@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { cores } from '../../styles'
+import { breakpoints, cores } from '../../styles'
 import { TagContainer } from '../Tag/sytles'
 import { ButtonLink } from '../Button/styles'
 
@@ -35,6 +35,11 @@ export const Card = styled('div').withConfig({
 
   ${TagContainer} {
     margin-right: 8px;
+  }
+
+  @media (max-width: ${breakpoints.tablet}) {
+    width: 90%;
+    margin-left: 5%;
   }
 `
 
@@ -98,4 +103,8 @@ export const Descricao = styled.p`
   display: block;
   margin: 8px;
   margin-bottom: 16px;
+
+  @media (max-width: ${breakpoints.tablet}) {
+    width: 95%;
+  }
 `

@@ -36,10 +36,10 @@ const Pratos = ({
 }: Props) => {
   const getDescricao = (description: string) => {
     if (restauranteOuPrato === 'prato') {
-      return description.slice(0, 172) + '...'
+      return description.slice(0, 152) + '...'
     }
-    if (description.length > 245) {
-      return description.slice(0, 242) + '...'
+    if (description.length > 195) {
+      return description.slice(0, 192) + '...'
     }
     return description
   }

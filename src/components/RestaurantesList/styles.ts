@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { cores } from '../../styles'
+import { breakpoints, cores } from '../../styles'
 
 export const Container = styled.section`
   background-color: ${cores.branco};
@@ -11,4 +11,11 @@ export const List = styled.ul`
   grid-template-columns: 1fr 1fr;
   column-gap: 40px;
   margin-top: 40px;
+  justify-content: center;
+  justify-items: center;
+
+  @media (max-width: ${breakpoints.tablet}) {
+    grid-template-columns: 1fr;
+    margin: 0 auto;
+  }
 `

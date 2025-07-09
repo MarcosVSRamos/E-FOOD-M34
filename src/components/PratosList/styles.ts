@@ -1,13 +1,17 @@
 import styled from 'styled-components'
-import { Descricao } from '../Cards/styles'
-import { ButtonLink } from '../Button/styles'
-import { cores } from '../../styles'
+import { AddToCard, Descricao } from '../Cards/styles'
+import { ButtonContainer, ButtonLink } from '../Button/styles'
+import { breakpoints, cores } from '../../styles'
 
 export const List = styled.ul`
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   gap: 30px;
   margin-top: 40px;
+
+  @media (max-width: ${breakpoints.tablet}) {
+    grid-template-columns: 1fr;
+  }
 `
 
 export const Card = styled.li`
@@ -26,7 +30,23 @@ export const Card = styled.li`
   }
 
   ${Descricao} {
-    max-width: 304px;
+    width: 304px;
+  }
+
+  @media (max-width: ${breakpoints.tablet}) {
+    width: 100%;
+
+    img {
+      width: 96%;
+    }
+
+    ${Descricao} {
+      width: 96%;
+    }
+
+    ${AddToCard} {
+      width: 96%;
+    }
   }
 `
 
