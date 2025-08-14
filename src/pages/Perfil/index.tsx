@@ -10,14 +10,6 @@ const Perfil = () => {
 
   const { data: cardapio } = useGetCardapioQuery(id!)
 
-  // const [cardapio, setCardapio] = useState<Restaurante>()
-
-  // useEffect(() => {
-  //   fetch(`https://fake-api-tau.vercel.app/api/efood/restaurantes/${id}`)
-  //     .then((res) => res.json())
-  //     .then((res) => setCardapio(res))
-  // }, [id])
-
   if (!cardapio) {
     return <h3>Carregando...</h3>
   }
