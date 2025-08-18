@@ -22,6 +22,11 @@ export const Div = styled.form`
 
   > div {
     margin-bottom: 20px;
+
+    small {
+      display: block;
+      margin-bottom: 8px;
+    }
   }
 
   ${ButtonContainer} {
@@ -56,7 +61,7 @@ export const FlexInput = styled.div`
     width: 228px;
   }
 
-  .card-code {
+  .cvv {
     width: 82px;
   }
 

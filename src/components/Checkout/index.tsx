@@ -1,14 +1,20 @@
+import { useFormik } from 'formik'
+import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+
+import * as Yup from 'yup'
+
 import Button from '../Button'
-import * as S from './styles'
 import { RootReducer } from '../../store'
+
 import {
   closeCheckout,
   exitFindCheckout,
   toFindCheckout
 } from '../../store/reducers/cart'
-import { useFormik } from 'formik'
-import { useState } from 'react'
+
+import * as S from './styles'
+import { getTotalPrice, parseToBrl } from '../../utils'
 
 const Checkout = () => {
   const [step, setStep] = useState<'address' | 'payment'>('address')
@@ -46,6 +52,16 @@ const Checkout = () => {
       city: '',
       street: ''
     },
+    validationSchema: Yup.object({
+      name: Yup.string()
+        .min(5, 'O nome precisa te pelo menos 5 caracteres')
+        .required('*Obrigatório!'),
+      complement: Yup.string(),
+      homeNumber: Yup.number().required('*Obrigatório!'),
+      cep: Yup.number().required('*Obrigatório!'),
+      city: Yup.string().required('*Obrigatório!'),
+      street: Yup.string().required('*Obrigatório!')
+    }),
     onSubmit: () => {
       setStep('payment')
       dispath(toFindCheckout())
@@ -60,17 +76,52 @@ const Checkout = () => {
       cardNumber: '',
       nameCard: ''
     },
-    onSubmit: (values) => {
-      console.log(values)
+    validationSchema: Yup.object({
+      year: Yup.number()
+        .min(2, 'O campo precisa ter 2 caracteres')
+        .max(2, 'O campo precisa ter 2 caracteres')
+        .required('*Obrigatório!'),
+      month: Yup.number()
+        .min(2, 'O campo precisa ter 2 caracteres')
+        .max(2, 'O campo precisa ter 2 caracteres')
+        .required('*Obrigatório!'),
+      cvv: Yup.number()
+        .min(3, 'O campo precisa ter 3 caracteres')
+        .max(3, 'O campo precisa ter 3 caracteres')
+        .required('*Obrigatório!'),
+      cardNumber: Yup.number()
+        .min(19, 'O campo precisa ter 19 caracteres')
+        .max(19, 'O campo precisa ter 19 caracteres')
+        .required('*Obrigatório!'),
+      nameCard: Yup.string().required('*Obrigatório!')
+    }),
+    onSubmit: () => {
+      console.log(formPayment.values)
+      console.log(formAnddress.values)
     }
   })
+
+  const getErrorMessage = (fieldName: string, message?: string) => {
+    const addressTouched = fieldName in formAnddress.touched
+    const paymentTouched = fieldName in formPayment.touched
+
+    const isInvalidAddress = fieldName in formAnddress.errors
+    const isInvalidPayment = fieldName in formPayment.errors
+
+    if (addressTouched && isInvalidAddress) return message
+
+    if (paymentTouched && isInvalidPayment) return message
+    return ''
+  }
 
   return (
     <>
       {step === 'payment' && (
         <S.Div onSubmit={formPayment.handleSubmit}>
           <div>
-            <h2>Pagamento - Valor a pagar R$ 190,90</h2>
+            <h2>
+              Pagamento - Valor a pagar {parseToBrl(getTotalPrice(items))}
+            </h2>
             <div>
               <label htmlFor="nameCard">Nome no cartão</label>
               <S.Input
@@ -79,7 +130,11 @@ const Checkout = () => {
                 id="nameCard"
                 value={formPayment.values.nameCard}
                 onChange={formPayment.handleChange}
+                onBlur={formPayment.handleBlur}
               />
+              <small>
+                {getErrorMessage('nameCard', formPayment.errors.nameCard)}
+              </small>
 
               <S.FlexInput>
                 <div className="card-number">
@@ -90,17 +145,28 @@ const Checkout = () => {
                     id="cardNumber"
                     value={formPayment.values.cardNumber}
                     onChange={formPayment.handleChange}
+                    onBlur={formPayment.handleBlur}
                   />
+                  <small>
+                    {getErrorMessage(
+                      'cardNumber',
+                      formPayment.errors.cardNumber
+                    )}
+                  </small>
                 </div>
                 <div className="cvv">
                   <label htmlFor="cvv">CVV</label>
                   <S.Input
                     value={formPayment.values.cvv}
                     onChange={formPayment.handleChange}
+                    onBlur={formPayment.handleBlur}
                     type="number"
                     name="cvv"
                     id="cvv"
                   />
+                  <small>
+                    {getErrorMessage('cvv', formPayment.errors.cvv)}
+                  </small>
                 </div>
               </S.FlexInput>
 
@@ -110,30 +176,34 @@ const Checkout = () => {
                   <S.Input
                     value={formPayment.values.month}
                     onChange={formPayment.handleChange}
+                    onBlur={formPayment.handleBlur}
                     type="number"
                     name="month"
                     id="month"
                   />
+                  <small>
+                    {getErrorMessage('month', formPayment.errors.month)}
+                  </small>
                 </div>
                 <div>
                   <label htmlFor="year">Ano de vencimento</label>
                   <S.Input
                     value={formPayment.values.year}
                     onChange={formPayment.handleChange}
+                    onBlur={formPayment.handleBlur}
                     type="number"
                     name="year"
                     id="year"
                   />
+                  <small>
+                    {getErrorMessage('year', formPayment.errors.year)}
+                  </small>
                 </div>
               </S.FlexInput>
             </div>
           </div>
 
-          <Button
-            onClick={formPayment.handleSubmit}
-            typeButton="button"
-            title="Finalizar pagamento"
-          >
+          <Button typeButton="submit" title="Finalizar pagamento">
             Finalizar pagamento
           </Button>
           <Button
@@ -153,11 +223,13 @@ const Checkout = () => {
             <label htmlFor="name">Quem irá receber</label>
             <S.Input
               onChange={formAnddress.handleChange}
+              onBlur={formAnddress.handleBlur}
               value={formAnddress.values.name}
               type="text"
               name="name"
               id="name"
             />
+            <small>{getErrorMessage('name', formAnddress.errors.name)}</small>
             <label htmlFor="street">Endereço</label>
             <S.Input
               value={formAnddress.values.street}
@@ -165,7 +237,11 @@ const Checkout = () => {
               name="street"
               id="street"
               onChange={formAnddress.handleChange}
+              onBlur={formAnddress.handleBlur}
             />
+            <small>
+              {getErrorMessage('street', formAnddress.errors.street)}
+            </small>
             <label htmlFor="city">Cidade</label>
             <S.Input
               value={formAnddress.values.city}
@@ -173,27 +249,38 @@ const Checkout = () => {
               name="city"
               id="city"
               onChange={formAnddress.handleChange}
+              onBlur={formAnddress.handleBlur}
             />
+            <small>{getErrorMessage('city', formAnddress.errors.city)}</small>
             <S.FlexInput>
               <div>
                 <label htmlFor="cep">CEP</label>
                 <S.Input
                   value={formAnddress.values.cep}
                   onChange={formAnddress.handleChange}
+                  onBlur={formAnddress.handleBlur}
                   type="number"
                   name="cep"
                   id="cep"
                 />
+                <small>{getErrorMessage('cep', formAnddress.errors.cep)}</small>
               </div>
               <div>
                 <label htmlFor="homeNumber">Número</label>
                 <S.Input
                   value={formAnddress.values.homeNumber}
                   onChange={formAnddress.handleChange}
+                  onBlur={formAnddress.handleBlur}
                   type="number"
                   name="homeNumber"
                   id="homeNumber"
                 />
+                <small>
+                  {getErrorMessage(
+                    'homeNumber',
+                    formAnddress.errors.homeNumber
+                  )}
+                </small>
               </div>
             </S.FlexInput>
 
@@ -201,17 +288,14 @@ const Checkout = () => {
             <S.Input
               value={formAnddress.values.complement}
               onChange={formAnddress.handleChange}
+              onBlur={formAnddress.handleBlur}
               type="text"
               name="complement"
               id="complement"
             />
           </div>
 
-          <Button
-            onClick={formAnddress.handleSubmit}
-            typeButton="button"
-            title="Continuar com o pagamento"
-          >
+          <Button typeButton="submit" title="Continuar com o pagamento">
             Continuar com o pagamento
           </Button>
           <Button

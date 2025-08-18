@@ -2,7 +2,7 @@ import { ReactNode } from 'react'
 import { ButtonContainer, ButtonLink } from './styles'
 
 type Props = {
-  typeButton: 'button' | 'link'
+  typeButton: 'button' | 'link' | 'submit'
   title: string
   to?: string
   onClick?: () => void
@@ -12,7 +12,14 @@ type Props = {
 const Button = ({ typeButton, title, to, onClick, children }: Props) => {
   if (typeButton === 'button') {
     return (
-      <ButtonContainer title={title} onClick={onClick}>
+      <ButtonContainer type="button" title={title} onClick={onClick}>
+        {children}
+      </ButtonContainer>
+    )
+  }
+  if (typeButton === 'submit') {
+    return (
+      <ButtonContainer type="submit" title={title}>
         {children}
       </ButtonContainer>
     )

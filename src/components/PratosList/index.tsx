@@ -5,17 +5,11 @@ import Pratos from '../Cards'
 import fechar from '../../assets/images/fechar.png'
 import { BuyButton, Card, ImgModal, List, Modal, ModalContent } from './styles'
 import { add, open } from '../../store/reducers/cart'
+import { parseToBrl } from '../../utils'
 
 type Props = {
   name: string
   pratos: Prato[]
-}
-
-export const formataPreco = (preco = 0) => {
-  return new Intl.NumberFormat('pt-BR', {
-    style: 'currency',
-    currency: 'BRL'
-  }).format(preco)
 }
 
 interface ModalState {
@@ -86,7 +80,7 @@ const PratosList = ({ pratos, name }: Props) => {
               <span>{`porção para ${modal.prato?.porcao}`}</span>
               <BuyButton
                 onClick={addToCard}
-              >{`Adicionar ao carrinho - ${formataPreco(
+              >{`Adicionar ao carrinho - ${parseToBrl(
                 modal.prato?.preco
               )}`}</BuyButton>
             </div>
