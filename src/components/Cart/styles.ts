@@ -18,20 +18,31 @@ export const CardContainer = styled.div`
   }
 `
 
+export const CartContent = styled.div`
+  display: block;
+
+  &.visible {
+    display: none;
+  }
+`
+
 export const SideBar = styled.aside`
   background-color: ${cores.vermelho};
   z-index: 1;
-  padding: 36px 16px 0 16px;
+  padding: 32px 8px 0 8px;
   max-width: 360px;
   width: 100%;
 
-  ${ButtonContainer} {
-    max-width: 100%;
-    width: 100%;
-    border: none;
-    margin: 0;
-    color: ${cores.vermelho};
-    background-color: ${cores.textoSecundario};
+  > div {
+    > ${ButtonContainer} {
+      max-width: 100%;
+      width: 100%;
+      border: none;
+      margin: 0;
+      color: ${cores.vermelho};
+      background-color: ${cores.textoSecundario};
+      cursor: pointer;
+    }
   }
 `
 
@@ -90,5 +101,17 @@ export const CartItem = styled.li`
     position: absolute;
     bottom: 8px;
     right: 8px;
+  }
+`
+
+export const DivCheckout = styled.div`
+  width: 100%;
+  height: 100%;
+  display: none;
+
+  &.visible {
+    display: block;
+    position: absolute;
+    z-index: 2;
   }
 `

@@ -12,7 +12,7 @@ type Props = {
 const Button = ({ typeButton, title, to, onClick, children }: Props) => {
   if (typeButton === 'button') {
     return (
-      <ButtonContainer type="button" title={title} onClick={onClick}>
+      <ButtonContainer title={title} onClick={onClick}>
         {children}
       </ButtonContainer>
     )

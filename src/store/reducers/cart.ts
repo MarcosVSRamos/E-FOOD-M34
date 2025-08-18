@@ -5,11 +5,15 @@ import { Prato } from '../../pages/Home'
 type CartState = {
   items: Prato[]
   isOpen: boolean
+  checkout: boolean
+  findCheckout: boolean
 }
 
 const initialState: CartState = {
   items: [],
-  isOpen: false
+  isOpen: false,
+  checkout: false,
+  findCheckout: false
 }
 
 const cartSlice = createSlice({
@@ -33,10 +37,31 @@ const cartSlice = createSlice({
     },
     close: (state) => {
       state.isOpen = false
+    },
+    openCheckout: (state) => {
+      state.checkout = true
+    },
+    closeCheckout: (state) => {
+      state.checkout = false
+    },
+    toFindCheckout: (state) => {
+      state.findCheckout = true
+    },
+    exitFindCheckout: (state) => {
+      state.findCheckout = false
     }
   }
 })
 
-export const { add, open, close, remove } = cartSlice.actions
+export const {
+  add,
+  open,
+  close,
+  remove,
+  openCheckout,
+  closeCheckout,
+  toFindCheckout,
+  exitFindCheckout
+} = cartSlice.actions
 
 export default cartSlice.reducer

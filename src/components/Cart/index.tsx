@@ -1,17 +1,38 @@
 import { useDispatch, UseDispatch, useSelector } from 'react-redux'
 import { RootReducer } from '../../store'
-import { close, remove } from '../../store/reducers/cart'
+import {
+  close,
+  closeCheckout,
+  openCheckout,
+  remove
+} from '../../store/reducers/cart'
 import { formataPreco } from '../PratosList'
 import Button from '../Button'
-import { CardContainer, CartItem, Overlay, Prices, SideBar } from './styles'
+import {
+  CardContainer,
+  CartContent,
+  CartItem,
+  DivCheckout,
+  Overlay,
+  Prices,
+  SideBar
+} from './styles'
+import Checkout from '../Checkout'
 
 const Cart = () => {
-  const { isOpen, items } = useSelector((state: RootReducer) => state.cart)
+  const { isOpen, items, checkout } = useSelector(
+    (state: RootReducer) => state.cart
+  )
 
   const dispath = useDispatch()
 
+  const openToCheckout = () => {
+    dispath(openCheckout())
+  }
+
   const closeCart = () => {
     dispath(close())
+    dispath(closeCheckout())
   }
 
   const getValorTotal = () => {
@@ -28,24 +49,33 @@ const Cart = () => {
     <CardContainer className={isOpen ? 'is-open' : ''}>
       <Overlay onClick={closeCart} />
       <SideBar>
-        <ul>
-          {items.map((item) => (
-            <CartItem key={item.id}>
-              <img src={item.foto} alt={item.nome} />
-              <div>
-                <h3>{item.nome}</h3>
-                <span>{formataPreco(item.preco)}</span>
-              </div>
-              <button onClick={() => removeItem(item.id)} type="button" />
-            </CartItem>
-          ))}
-        </ul>
-        <Prices>
-          <p>Valor Total</p> <span>{formataPreco(getValorTotal())}</span>
-        </Prices>
-        <Button title="Continuar com a entrega" typeButton="button">
-          Continuar com a entrega
-        </Button>
+        <CartContent className={checkout ? 'visible' : ''}>
+          <ul>
+            {items.map((item) => (
+              <CartItem key={item.id}>
+                <img src={item.foto} alt={item.nome} />
+                <div>
+                  <h3>{item.nome}</h3>
+                  <span>{formataPreco(item.preco)}</span>
+                </div>
+                <button onClick={() => removeItem(item.id)} type="button" />
+              </CartItem>
+            ))}
+          </ul>
+          <Prices>
+            <p>Valor Total</p> <span>{formataPreco(getValorTotal())}</span>
+          </Prices>
+          <Button
+            onClick={openToCheckout}
+            title="Continuar com a entrega"
+            typeButton="button"
+          >
+            Continuar com a entrega
+          </Button>
+        </CartContent>
+        <DivCheckout className={checkout ? 'visible' : ''}>
+          <Checkout />
+        </DivCheckout>
       </SideBar>
     </CardContainer>
   )
