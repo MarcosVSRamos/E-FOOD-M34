@@ -1,6 +1,36 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { Prato, Restaurante } from '../pages/Home'
 
+type Product = {
+  id: number
+  price: number
+}
+
+type PurchasePayload = {
+  products: Product[]
+  delivery: {
+    reciever: string
+    address: {
+      description: string
+      city: string
+      zipCode: string
+      number: number
+      complement: string
+    }
+  }
+  payment: {
+    card: {
+      name: string
+      number: string
+      code: number
+      expires: {
+        month: number
+        year: number
+      }
+    }
+  }
+}
+
 export const api = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: 'https://ebac-fake-api.vercel.app/api/efood/'
@@ -17,6 +47,13 @@ export const api = createApi({
     }),
     getPratos: builder.query<Prato, string>({
       query: (id) => `restaurantes/${id}`
+    }),
+    purchase: builder.mutation<any, PurchasePayload>({
+      query: (body) => ({
+        url: 'checkout',
+        method: 'POST',
+        body
+      })
     })
   })
 })
@@ -25,5 +62,6 @@ export const {
   useGetRestaurantesQuery,
   useGetBannerQuery,
   useGetCardapioQuery,
-  useGetPratosQuery
+  useGetPratosQuery,
+  usePurchaseMutation
 } = api

@@ -79,3 +79,18 @@ export const FlexInput = styled.div`
     }
   }
 `
+
+export const CheckoutValidation = styled.div`
+  display: block;
+
+  h2 {
+    margin-bottom: 16px;
+    font-size: 16px;
+    font-weight: bold;
+  }
+
+  p {
+    margin-bottom: 24px;
+    width: 344px;
+  }
+`
