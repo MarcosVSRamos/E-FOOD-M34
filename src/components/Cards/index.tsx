@@ -1,78 +1,71 @@
 import Tag from '../Tag'
-import {
-  AddToCard,
-  Card,
-  Descricao,
-  DivHeader,
-  HeaderCard,
-  Img,
-  Infos
-} from './styles'
-import estrela from '../../assets/images/estrela.png'
+import star from '../../assets/images/estrela.png'
 import { ButtonLink } from '../Button/styles'
+
+import * as S from './styles'
 
 type Props = {
   id: number
-  restauranteOuPrato: 'restaurante' | 'prato'
-  titulo: string
-  tipo?: string
+  restaurantOrSnak: 'restaurant' | 'snak'
+  title: string
+  type?: string
   onClickModal?: () => void
-  destacado?: boolean
-  descricao: string
-  capa: string
-  avaliacao?: number
+  highlited?: boolean
+  description: string
+  cover: string
+  avaliation?: number
 }
 
-const Pratos = ({
+const Snaks = ({
   id,
-  restauranteOuPrato,
-  titulo,
-  tipo,
+  restaurantOrSnak,
+  title,
   onClickModal,
-  descricao,
-  avaliacao,
-  destacado,
-  capa
+  description,
+  cover,
+  type,
+  highlited,
+  avaliation
 }: Props) => {
-  const getDescricao = (description: string) => {
-    if (restauranteOuPrato === 'prato') {
-      return description.slice(0, 152) + '...'
+  const getDescription = (description?: string) => {
+    if (restaurantOrSnak === 'snak') {
+      return (
+        description?.slice(0, 152) +
+        (description && description.length > 152 ? '...' : '')
+      )
     }
-    if (description.length > 195) {
-      return description.slice(0, 192) + '...'
-    }
-    return description
+    return description && description.length > 195
+      ? description.slice(0, 192) + '...'
+      : description || 'Erro ao renderizar descrição'
   }
 
   return (
-    <Card id={`${id}`} restauranteOuPrato={restauranteOuPrato}>
-      <Img src={capa} alt={titulo} />
-      {tipo && (
-        <Infos>
-          {destacado && <Tag size="small">Destaque da Semana</Tag>}
-          <Tag>{tipo}</Tag>
-        </Infos>
+    <S.Card id={`${id}`} restaurantOrSnak={restaurantOrSnak}>
+      <S.Img src={cover} alt={title} />
+      {type && (
+        <S.Infos>
+          {highlited && <Tag size="small">Destaque da Semana</Tag>}
+          <Tag>{type}</Tag>
+        </S.Infos>
       )}
-      <DivHeader>
-        <HeaderCard>{titulo}</HeaderCard>
-        {avaliacao && (
+      <S.DivHeader>
+        <S.HeaderCard>{title}</S.HeaderCard>
+        {avaliation !== undefined && (
           <div>
-            <HeaderCard>{avaliacao}</HeaderCard>
-            <img src={estrela} />
+            <S.HeaderCard>{avaliation}</S.HeaderCard>
+            <img src={star} />
           </div>
         )}
-      </DivHeader>
-      <Descricao>{getDescricao(descricao)}</Descricao>
-      {restauranteOuPrato === 'restaurante' ? (
-        <ButtonLink type="button" to={`/perfil/${id}`}>
-          Saiba mais
-        </ButtonLink>
+      </S.DivHeader>
+      <S.Descricao>{getDescription(description)}</S.Descricao>
+      {restaurantOrSnak === 'restaurant' ? (
+        <ButtonLink to={`/perfil/${id}`}>Saiba mais</ButtonLink>
       ) : (
-        <AddToCard type="button" onClick={onClickModal}>
+        <S.AddToCard type="button" onClick={onClickModal}>
           Adicionar ao carrinho
-        </AddToCard>
+        </S.AddToCard>
       )}
-    </Card>
+    </S.Card>
   )
 }
-export default Pratos
+export default Snaks

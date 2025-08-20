@@ -1,36 +1,31 @@
 import styled from 'styled-components'
-import { breakpoints, cores } from '../../styles'
+import { breakpoints, colors } from '../../styles'
 import { TagContainer } from '../Tag/sytles'
 import { ButtonLink } from '../Button/styles'
 
 type CardProps = {
-  restauranteOuPrato: 'restaurante' | 'prato'
+  restaurantOrSnak: 'restaurant' | 'snak'
 }
 
 export const Card = styled('div').withConfig({
-  shouldForwardProp: (prop) => prop !== 'restauranteOuPrato'
+  shouldForwardProp: (prop) => prop !== 'restaurantOrSnak'
 })<CardProps>`
-  background-color: ${({ restauranteOuPrato }) =>
-    restauranteOuPrato === 'restaurante' ? cores.fundoClaro : cores.vermelho};
-  color: ${cores.vermelho};
+  background-color: ${({ restaurantOrSnak }) =>
+    restaurantOrSnak === 'restaurant' ? colors.coverWhite : colors.red};
   width: 472px;
   height: 398px;
   max-width: 100%;
-  border: ${({ restauranteOuPrato }) =>
-    restauranteOuPrato === 'restaurante'
-      ? `solid 1px ${cores.vermelho}`
-      : 'none'};
-  color: ${({ restauranteOuPrato }) =>
-    restauranteOuPrato === 'restaurante'
-      ? cores.vermelho
-      : cores.textoSecundario};
+  border: ${({ restaurantOrSnak }) =>
+    restaurantOrSnak === 'restaurant' ? `solid 1px ${colors.red}` : 'none'};
+  color: ${({ restaurantOrSnak }) =>
+    restaurantOrSnak === 'restaurant' ? colors.red : colors.secondaryText};
   margin-bottom: 40px;
   position: relative;
 
   ${ButtonLink} {
     padding: 2px 8px;
-    background-color: ${cores.vermelho};
-    color: ${cores.textoSecundario};
+    background-color: ${colors.red};
+    color: ${colors.secondaryText};
   }
 
   ${TagContainer} {
@@ -45,8 +40,8 @@ export const Card = styled('div').withConfig({
 
 export const AddToCard = styled.button`
   border: none;
-  background-color: ${cores.textoSecundario};
-  color: ${cores.vermelho};
+  background-color: ${colors.secondaryText};
+  color: ${colors.red};
   width: 304px;
   height: 24px;
   font-size: 14px;

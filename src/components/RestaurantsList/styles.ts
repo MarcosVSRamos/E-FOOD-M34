@@ -1,8 +1,9 @@
 import styled from 'styled-components'
-import { breakpoints, cores } from '../../styles'
+
+import { breakpoints, colors } from '../../styles'
 
 export const Container = styled.section`
-  background-color: ${cores.branco};
+  background-color: ${colors.white};
   padding: 80px 0;
 `
 

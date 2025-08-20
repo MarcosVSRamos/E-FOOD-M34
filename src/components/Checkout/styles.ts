@@ -1,11 +1,12 @@
 import styled from 'styled-components'
-import { cores } from '../../styles'
+
+import { colors } from '../../styles'
 import { ButtonContainer } from '../Button/styles'
 
 export const Div = styled.form`
   width: 100%;
   height: 100%;
-  color: ${cores.textoSecundario};
+  color: ${colors.secondaryText};
   display: block;
 
   h2 {
@@ -20,13 +21,13 @@ export const Div = styled.form`
     font-size: 14px;
   }
 
-  > div {
-    margin-bottom: 20px;
+  small {
+    display: block;
+    margin-bottom: 8px;
+  }
 
-    small {
-      display: block;
-      margin-bottom: 8px;
-    }
+  .complement {
+    margin-bottom: 24px;
   }
 
   ${ButtonContainer} {
@@ -35,22 +36,24 @@ export const Div = styled.form`
     max-width: 100%;
     border: none;
     margin: 8px 0;
-    color: ${cores.vermelho};
-    background-color: ${cores.textoSecundario};
+    color: ${colors.red};
+    background-color: ${colors.secondaryText};
     cursor: pointer;
   }
 `
 
-export const Input = styled.input`
-  display: block;
-  width: 344px;
-  height: 32px;
-  max-width: 100%;
-  border: none;
-  margin: 8px 0;
-  color: ${cores.vermelho};
-  background-color: ${cores.textoSecundario};
-  cursor: pointer;
+export const InputGroup = styled.div`
+  input {
+    display: block;
+    width: 344px;
+    height: 32px;
+    max-width: 100%;
+    border: none;
+    margin: 8px 0;
+    color: ${colors.red};
+    background-color: ${colors.secondaryText};
+    cursor: pointer;
+  }
 `
 
 export const FlexInput = styled.div`

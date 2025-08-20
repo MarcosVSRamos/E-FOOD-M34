@@ -1,4 +1,4 @@
-import { Prato } from '../pages/Home'
+import { Snak } from '../types'
 
 export const parseToBrl = (amount = 0) => {
   return new Intl.NumberFormat('pt-BR', {
@@ -7,7 +7,7 @@ export const parseToBrl = (amount = 0) => {
   }).format(amount)
 }
 
-export const getTotalPrice = (items: Prato[]) => {
+export const getTotalPrice = (items: Snak[]) => {
   return items.reduce((acumulator, currentItem) => {
     if (currentItem.preco) {
       return (acumulator += currentItem.preco)

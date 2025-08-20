@@ -1,10 +1,10 @@
 import { createGlobalStyle } from 'styled-components'
 
-export const cores = {
-  vermelho: '#E66767',
-  branco: '#FFF8F2',
-  fundoClaro: '#FFFFFF',
-  textoSecundario: '#FFEBD9'
+export const colors = {
+  red: '#E66767',
+  white: '#FFF8F2',
+  coverWhite: '#FFFFFF',
+  secondaryText: '#FFEBD9'
 }
 
 export const breakpoints = {
@@ -22,8 +22,8 @@ const GlobalCss = createGlobalStyle`
     text-decoration: none;
 
     body {
-      background-color: ${cores.fundoClaro};
-      color: ${cores.vermelho};
+      background-color: ${colors.coverWhite};
+      color: ${colors.red};
     }
 
   }

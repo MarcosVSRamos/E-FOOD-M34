@@ -1,52 +1,27 @@
-import { useFormik } from 'formik'
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-
+import { useFormik } from 'formik'
 import * as Yup from 'yup'
+import InputMask from 'react-input-mask'
 
 import Button from '../Button'
 import { RootReducer } from '../../store'
-
-import {
-  clearCart,
-  closeCheckout,
-  exitFindCheckout,
-  toFindCheckout
-} from '../../store/reducers/cart'
-
-import * as S from './styles'
+import { clear, closeCheckout, toFindCheckout } from '../../store/reducers/cart'
 import { getTotalPrice, parseToBrl } from '../../utils'
 import { usePurchaseMutation } from '../../services/api'
 
+import * as S from './styles'
+
 const Checkout = () => {
-  const [step, setStep] = useState<'address' | 'payment' | 'checkout'>(
-    'address'
-  )
-  const [purchase, { isLoading, isError, data, isSuccess }] =
+  const [step, setStep] = useState<'address' | 'payment'>('address')
+  const [purchase, { isLoading, data, isSuccess, reset }] =
     usePurchaseMutation()
 
-  const { checkout, findCheckout, items } = useSelector(
-    (state: RootReducer) => state.cart
-  )
-  // fuções com o dispath
+  const { items } = useSelector((state: RootReducer) => state.cart)
+  const dispatch = useDispatch()
 
-  const dispath = useDispatch()
-
-  const closeToCheckout = () => {
-    dispath(closeCheckout())
-  }
-
-  const closeFindCheckout = () => {
-    dispath(exitFindCheckout())
-  }
-
-  const nextCheckout = () => {
-    dispath(toFindCheckout())
-  }
-
-  // validações com formik
-
-  const formAnddress = useFormik({
+  // Formulário de endereço
+  const formAddress = useFormik({
     initialValues: {
       name: '',
       complement: '',
@@ -57,17 +32,17 @@ const Checkout = () => {
     },
     validationSchema: Yup.object({
       name: Yup.string()
-        .min(5, 'O nome precisa te pelo menos 5 caracteres')
+        .min(5, 'O nome precisa ter pelo menos 5 caracteres')
         .required('*Obrigatório!'),
       complement: Yup.string(),
       homeNumber: Yup.number().required('*Obrigatório!'),
-      cep: Yup.number().required('*Obrigatório!'),
+      cep: Yup.string().required('*Obrigatório!'),
       city: Yup.string().required('*Obrigatório!'),
       street: Yup.string().required('*Obrigatório!')
     }),
     onSubmit: () => {
+      dispatch(toFindCheckout())
       setStep('payment')
-      dispath(toFindCheckout())
     }
   })
 
@@ -89,22 +64,21 @@ const Checkout = () => {
       cvv: Yup.number()
         .min(3, 'O campo precisa ter 3 caracteres')
         .required('*Obrigatório!'),
-      cardNumber: Yup.number()
+      cardNumber: Yup.string()
         .min(19, 'O campo precisa ter 19 caracteres')
         .required('*Obrigatório!'),
       nameCard: Yup.string().required('*Obrigatório!')
     }),
     onSubmit: (values) => {
-      dispath(clearCart())
       purchase({
         delivery: {
-          reciever: formAnddress.values.name,
+          reciever: formAddress.values.name,
           address: {
-            description: formAnddress.values.street,
-            city: formAnddress.values.city,
-            number: Number(formAnddress.values.homeNumber),
-            complement: formAnddress.values.complement,
-            zipCode: formAnddress.values.cep
+            description: formAddress.values.street,
+            city: formAddress.values.city,
+            number: Number(formAddress.values.homeNumber),
+            complement: formAddress.values.complement,
+            zipCode: formAddress.values.cep
           }
         },
         payment: {
@@ -118,232 +92,37 @@ const Checkout = () => {
             }
           }
         },
-        products: [
-          {
-            id: 1,
-            price: 10
-          }
-        ]
+        products: items.map((item) => ({
+          id: item.id,
+          price: item.preco
+        }))
       })
     }
   })
 
   const getErrorMessage = (fieldName: string, message?: string) => {
-    const addressTouched = fieldName in formAnddress.touched
-    const paymentTouched = fieldName in formPayment.touched
+    const touchedAddress = fieldName in formAddress.touched
+    const touchedPayment = fieldName in formPayment.touched
+    const invalidAddress = fieldName in formAddress.errors
+    const invalidPayment = fieldName in formPayment.errors
 
-    const isInvalidAddress = fieldName in formAnddress.errors
-    const isInvalidPayment = fieldName in formPayment.errors
-
-    if (addressTouched && isInvalidAddress) return message
-
-    if (paymentTouched && isInvalidPayment) return message
+    if (touchedAddress && invalidAddress) return message
+    if (touchedPayment && invalidPayment) return message
     return ''
+  }
+
+  const resetCheckout = () => {
+    dispatch(clear())
+    dispatch(closeCheckout())
+    formAddress.resetForm()
+    formPayment.resetForm()
+    setStep('address')
+    reset()
   }
 
   return (
     <>
-      {!isSuccess ? (
-        <>
-          {step === 'payment' && (
-            <S.Div onSubmit={formPayment.handleSubmit}>
-              <div>
-                <h2>
-                  Pagamento - Valor a pagar {parseToBrl(getTotalPrice(items))}
-                </h2>
-                <div>
-                  <label htmlFor="nameCard">Nome no cartão</label>
-                  <S.Input
-                    type="text"
-                    name="nameCard"
-                    id="nameCard"
-                    value={formPayment.values.nameCard}
-                    onChange={formPayment.handleChange}
-                    onBlur={formPayment.handleBlur}
-                  />
-                  <small>
-                    {getErrorMessage('nameCard', formPayment.errors.nameCard)}
-                  </small>
-
-                  <S.FlexInput>
-                    <div className="card-number">
-                      <label htmlFor="cardNumber">Número do cartão</label>
-                      <S.Input
-                        type="number"
-                        name="cardNumber"
-                        id="cardNumber"
-                        value={formPayment.values.cardNumber}
-                        onChange={formPayment.handleChange}
-                        onBlur={formPayment.handleBlur}
-                      />
-                      <small>
-                        {getErrorMessage(
-                          'cardNumber',
-                          formPayment.errors.cardNumber
-                        )}
-                      </small>
-                    </div>
-                    <div className="cvv">
-                      <label htmlFor="cvv">CVV</label>
-                      <S.Input
-                        value={formPayment.values.cvv}
-                        onChange={formPayment.handleChange}
-                        onBlur={formPayment.handleBlur}
-                        type="number"
-                        name="cvv"
-                        id="cvv"
-                      />
-                      <small>
-                        {getErrorMessage('cvv', formPayment.errors.cvv)}
-                      </small>
-                    </div>
-                  </S.FlexInput>
-
-                  <S.FlexInput>
-                    <div>
-                      <label htmlFor="month">Mês de vencimento</label>
-                      <S.Input
-                        value={formPayment.values.month}
-                        onChange={formPayment.handleChange}
-                        onBlur={formPayment.handleBlur}
-                        type="number"
-                        name="month"
-                        id="month"
-                      />
-                      <small>
-                        {getErrorMessage('month', formPayment.errors.month)}
-                      </small>
-                    </div>
-                    <div>
-                      <label htmlFor="year">Ano de vencimento</label>
-                      <S.Input
-                        value={formPayment.values.year}
-                        onChange={formPayment.handleChange}
-                        onBlur={formPayment.handleBlur}
-                        type="number"
-                        name="year"
-                        id="year"
-                      />
-                      <small>
-                        {getErrorMessage('year', formPayment.errors.year)}
-                      </small>
-                    </div>
-                  </S.FlexInput>
-                </div>
-              </div>
-
-              <Button typeButton="submit" title="Finalizar pagamento">
-                Finalizar pagamento
-              </Button>
-              <Button
-                onClick={() => setStep('address')}
-                typeButton="button"
-                title="Voltar para a edição de endereço"
-              >
-                Voltar para a edição de endereço
-              </Button>
-            </S.Div>
-          )}
-
-          {step === 'address' && (
-            <S.Div onSubmit={formAnddress.handleSubmit}>
-              <div>
-                <h2>Entrega</h2>
-                <label htmlFor="name">Quem irá receber</label>
-                <S.Input
-                  onChange={formAnddress.handleChange}
-                  onBlur={formAnddress.handleBlur}
-                  value={formAnddress.values.name}
-                  type="text"
-                  name="name"
-                  id="name"
-                />
-                <small>
-                  {getErrorMessage('name', formAnddress.errors.name)}
-                </small>
-                <label htmlFor="street">Endereço</label>
-                <S.Input
-                  value={formAnddress.values.street}
-                  type="text"
-                  name="street"
-                  id="street"
-                  onChange={formAnddress.handleChange}
-                  onBlur={formAnddress.handleBlur}
-                />
-                <small>
-                  {getErrorMessage('street', formAnddress.errors.street)}
-                </small>
-                <label htmlFor="city">Cidade</label>
-                <S.Input
-                  value={formAnddress.values.city}
-                  type="text"
-                  name="city"
-                  id="city"
-                  onChange={formAnddress.handleChange}
-                  onBlur={formAnddress.handleBlur}
-                />
-                <small>
-                  {getErrorMessage('city', formAnddress.errors.city)}
-                </small>
-                <S.FlexInput>
-                  <div>
-                    <label htmlFor="cep">CEP</label>
-                    <S.Input
-                      value={formAnddress.values.cep}
-                      onChange={formAnddress.handleChange}
-                      onBlur={formAnddress.handleBlur}
-                      type="number"
-                      name="cep"
-                      id="cep"
-                    />
-                    <small>
-                      {getErrorMessage('cep', formAnddress.errors.cep)}
-                    </small>
-                  </div>
-                  <div>
-                    <label htmlFor="homeNumber">Número</label>
-                    <S.Input
-                      value={formAnddress.values.homeNumber}
-                      onChange={formAnddress.handleChange}
-                      onBlur={formAnddress.handleBlur}
-                      type="number"
-                      name="homeNumber"
-                      id="homeNumber"
-                    />
-                    <small>
-                      {getErrorMessage(
-                        'homeNumber',
-                        formAnddress.errors.homeNumber
-                      )}
-                    </small>
-                  </div>
-                </S.FlexInput>
-
-                <label htmlFor="complement">{'Complemento (opicional)'}</label>
-                <S.Input
-                  value={formAnddress.values.complement}
-                  onChange={formAnddress.handleChange}
-                  onBlur={formAnddress.handleBlur}
-                  type="text"
-                  name="complement"
-                  id="complement"
-                />
-              </div>
-
-              <Button typeButton="submit" title="Continuar com o pagamento">
-                Continuar com o pagamento
-              </Button>
-              <Button
-                onClick={closeToCheckout}
-                typeButton="button"
-                title="Voltar para o carrinho"
-              >
-                Voltar para o carrinho
-              </Button>
-            </S.Div>
-          )}
-        </>
-      ) : (
+      {isSuccess ? (
         <S.Div>
           <S.CheckoutValidation>
             <h2>Pedido realizado - {data.orderId}</h2>
@@ -352,14 +131,10 @@ const Checkout = () => {
               preparação e, em breve, será entregue no endereço fornecido.
             </p>
             <p>
-              Gostaríamos de ressaltar que nossos entregadores não estão
-              autorizados a realizar cobranças extras.
+              Nossos entregadores não estão autorizados a realizar cobranças
+              extras.
             </p>
-            <p>
-              Lembre-se da importância de higienizar as mãos após o recebimento
-              do pedido, garantindo assim sua segurança e bem-estar durante a
-              refeição.
-            </p>
+            <p>Lembre-se de higienizar as mãos após o recebimento do pedido.</p>
             <p>
               Esperamos que desfrute de uma deliciosa e agradável experiência
               gastronômica. Bom apetite!
@@ -368,14 +143,230 @@ const Checkout = () => {
             <Button
               typeButton="button"
               title="Concluir"
-              onClick={() => dispath(closeCheckout())}
+              onClick={resetCheckout}
             >
               Concluir
             </Button>
           </S.CheckoutValidation>
         </S.Div>
+      ) : (
+        <>
+          {step === 'address' && (
+            <S.Div onSubmit={formAddress.handleSubmit}>
+              <h2>Entrega</h2>
+              <S.InputGroup>
+                <label htmlFor="name">Quem irá receber</label>
+                <input
+                  name="name"
+                  id="name"
+                  type="text"
+                  value={formAddress.values.name}
+                  onChange={formAddress.handleChange}
+                  onBlur={formAddress.handleBlur}
+                />
+                <small>
+                  {getErrorMessage('name', formAddress.errors.name)}
+                </small>
+              </S.InputGroup>
+              <S.InputGroup>
+                <label htmlFor="street">Endereço</label>
+                <input
+                  name="street"
+                  id="street"
+                  type="text"
+                  value={formAddress.values.street}
+                  onChange={formAddress.handleChange}
+                  onBlur={formAddress.handleBlur}
+                />
+                <small>
+                  {getErrorMessage('street', formAddress.errors.street)}
+                </small>
+              </S.InputGroup>
+
+              <S.InputGroup>
+                <label htmlFor="city">Cidade</label>
+                <input
+                  name="city"
+                  id="city"
+                  type="text"
+                  value={formAddress.values.city}
+                  onChange={formAddress.handleChange}
+                  onBlur={formAddress.handleBlur}
+                />
+                <small>
+                  {getErrorMessage('city', formAddress.errors.city)}
+                </small>
+              </S.InputGroup>
+              <S.FlexInput>
+                <S.InputGroup>
+                  <label htmlFor="cep">CEP</label>
+                  <InputMask
+                    className="input-mask"
+                    name="cep"
+                    id="cep"
+                    type="text"
+                    value={formAddress.values.cep}
+                    onChange={formAddress.handleChange}
+                    onBlur={formAddress.handleBlur}
+                    mask="99999-999"
+                  />
+                  <small>
+                    {getErrorMessage('cep', formAddress.errors.cep)}
+                  </small>
+                </S.InputGroup>
+                <S.InputGroup>
+                  <label htmlFor="homeNumber">Número</label>
+                  <input
+                    name="homeNumber"
+                    id="homeNumber"
+                    type="number"
+                    value={formAddress.values.homeNumber}
+                    onChange={formAddress.handleChange}
+                    onBlur={formAddress.handleBlur}
+                  />
+                  <small>
+                    {getErrorMessage(
+                      'homeNumber',
+                      formAddress.errors.homeNumber
+                    )}
+                  </small>
+                </S.InputGroup>
+              </S.FlexInput>
+
+              <S.InputGroup>
+                <label htmlFor="complement">{`Complemento (opcional)`}</label>
+                <input
+                  name="complement"
+                  className="complement"
+                  id="complement"
+                  type="text"
+                  value={formAddress.values.complement}
+                  onChange={formAddress.handleChange}
+                  onBlur={formAddress.handleBlur}
+                />
+              </S.InputGroup>
+
+              <Button typeButton="submit" title="Continuar com o pagamento">
+                Continuar com o pagamento
+              </Button>
+              <Button
+                typeButton="button"
+                title="Voltar para o carrinho"
+                onClick={() => {
+                  dispatch(closeCheckout())
+                }}
+              >
+                Voltar para o carrinho
+              </Button>
+            </S.Div>
+          )}
+
+          {step === 'payment' && (
+            <S.Div onSubmit={formPayment.handleSubmit}>
+              <h2>
+                Pagamento - Valor a pagar {parseToBrl(getTotalPrice(items))}
+              </h2>
+
+              <S.InputGroup>
+                <label htmlFor="nameCard">Nome no cartão</label>
+                <input
+                  name="nameCard"
+                  id="nameCard"
+                  type="text"
+                  value={formPayment.values.nameCard}
+                  onChange={formPayment.handleChange}
+                  onBlur={formPayment.handleBlur}
+                />
+                <small>
+                  {getErrorMessage('nameCard', formPayment.errors.nameCard)}
+                </small>
+              </S.InputGroup>
+
+              <S.FlexInput>
+                <S.InputGroup>
+                  <label htmlFor="cardNumber">Número do cartão</label>
+                  <InputMask
+                    name="cardNumber"
+                    id="cardNumber"
+                    type="text"
+                    value={formPayment.values.cardNumber}
+                    onChange={formPayment.handleChange}
+                    onBlur={formPayment.handleBlur}
+                    mask="9999 9999 9999 9999 9999"
+                  />
+                  <small>
+                    {getErrorMessage(
+                      'cardNumber',
+                      formPayment.errors.cardNumber
+                    )}
+                  </small>
+                </S.InputGroup>
+                <S.InputGroup>
+                  <label htmlFor="cvv">CVV</label>
+                  <InputMask
+                    name="cvv"
+                    id="cvv"
+                    type="text"
+                    value={formPayment.values.cvv}
+                    onChange={formPayment.handleChange}
+                    onBlur={formPayment.handleBlur}
+                    mask="999"
+                  />
+                  <small>
+                    {getErrorMessage('cvv', formPayment.errors.cvv)}
+                  </small>
+                </S.InputGroup>
+              </S.FlexInput>
+
+              <S.FlexInput>
+                <S.InputGroup>
+                  <label htmlFor="month">Mês de vencimento</label>
+                  <InputMask
+                    name="month"
+                    id="month"
+                    type="text"
+                    value={formPayment.values.month}
+                    onChange={formPayment.handleChange}
+                    onBlur={formPayment.handleBlur}
+                    mask="99"
+                  />
+                  <small>
+                    {getErrorMessage('month', formPayment.errors.month)}
+                  </small>
+                </S.InputGroup>
+                <S.InputGroup>
+                  <label htmlFor="year">Ano de vencimento</label>
+                  <InputMask
+                    name="year"
+                    id="year"
+                    type="text"
+                    value={formPayment.values.year}
+                    onChange={formPayment.handleChange}
+                    onBlur={formPayment.handleBlur}
+                    mask="99"
+                  />
+                  <small>
+                    {getErrorMessage('year', formPayment.errors.year)}
+                  </small>
+                </S.InputGroup>
+              </S.FlexInput>
+
+              <Button typeButton="submit" title="Finalizar pagamento">
+                {isLoading ? 'Processando...' : 'Finalizar pagamento'}
+              </Button>
+              <Button
+                typeButton="button"
+                title="Voltar para a edição de endereço"
+                onClick={() => setStep('address')}
+              >
+                Voltar para a edição de endereço
+              </Button>
+            </S.Div>
+          )}
+        </>
       )}
     </>
   )
 }
+
 export default Checkout

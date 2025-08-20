@@ -1,7 +1,8 @@
 import styled from 'styled-components'
-import { ButtonContainer, ButtonLink } from '../Button/styles'
-import { cores } from '../../styles'
-import fechar from '../../assets/images/lixeira-de-reciclagem 1.png'
+
+import { ButtonContainer } from '../Button/styles'
+import { colors } from '../../styles'
+import close from '../../assets/images/lixeira-de-reciclagem 1.png'
 
 export const CardContainer = styled.div`
   position: fixed;
@@ -27,13 +28,13 @@ export const CartContent = styled.div`
 `
 
 export const TextCart = styled.p`
-  color: ${cores.textoSecundario};
+  color: ${colors.secondaryText};
   width: 290px;
   margin: 0 auto;
 `
 
 export const SideBar = styled.aside`
-  background-color: ${cores.vermelho};
+  background-color: ${colors.red};
   z-index: 1;
   padding: 32px 8px 0 8px;
   max-width: 360px;
@@ -45,8 +46,8 @@ export const SideBar = styled.aside`
       width: 100%;
       border: none;
       margin: 0;
-      color: ${cores.vermelho};
-      background-color: ${cores.textoSecundario};
+      color: ${colors.red};
+      background-color: ${colors.secondaryText};
       cursor: pointer;
     }
   }
@@ -69,12 +70,12 @@ export const Prices = styled.div`
   margin-top: 32px;
   display: flex;
   justify-content: space-between;
-  color: ${cores.textoSecundario};
+  color: ${colors.secondaryText};
 `
 
 export const CartItem = styled.li`
   display: flex;
-  background-color: ${cores.textoSecundario};
+  background-color: ${colors.secondaryText};
   padding: 8px 0;
   margin: 8px 0;
   position: relative;
@@ -98,7 +99,7 @@ export const CartItem = styled.li`
   }
 
   button {
-    background-image: url(${fechar});
+    background-image: url(${close});
     width: 16px;
     height: 16px;
     border: none;

@@ -1,5 +1,6 @@
 import styled from 'styled-components'
-import { breakpoints, cores } from '../../styles'
+
+import { breakpoints, colors } from '../../styles'
 
 export const Hero = styled.div`
   width: 100%;
@@ -10,7 +11,7 @@ export const Hero = styled.div`
 `
 
 export const Div = styled.div`
-  color: ${cores.branco};
+  color: ${colors.white};
   height: 280px;
   max-height: 100%;
 `

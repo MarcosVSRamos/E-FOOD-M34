@@ -1,7 +1,7 @@
 import styled from 'styled-components'
+
 import { AddToCard, Descricao } from '../Cards/styles'
-import { ButtonContainer, ButtonLink } from '../Button/styles'
-import { breakpoints, cores } from '../../styles'
+import { breakpoints, colors } from '../../styles'
 
 export const List = styled.ul`
   display: grid;
@@ -79,8 +79,8 @@ export const ModalContent = styled.div`
   display: flex;
   height: 344px;
   width: 1024px;
-  color: ${cores.textoSecundario};
-  background-color: ${cores.vermelho};
+  color: ${colors.secondaryText};
+  background-color: ${colors.red};
   position: relative;
   z-index: 1;
 
@@ -131,8 +131,8 @@ export const BuyButton = styled.button`
   height: 24px;
   font-size: 14px;
   font-weight: bold;
-  color: ${cores.vermelho};
-  background-color: ${cores.textoSecundario};
+  color: ${colors.red};
+  background-color: ${colors.secondaryText};
   border: none;
   cursor: pointer;
 `

@@ -2,27 +2,25 @@ import { useParams } from 'react-router-dom'
 
 import SecondHeader from '../../components/SecondHeader'
 import Banner from '../../components/Banner'
-import PratosList from '../../components/PratosList'
-import { useGetCardapioQuery } from '../../services/api'
+import SnaksList from '../../components/SnaksList'
+import { useGetMenuQuery } from '../../services/api'
 
 const Perfil = () => {
   const { id } = useParams()
 
-  const { data: cardapio } = useGetCardapioQuery(id!)
+  const { data: menu, isLoading } = useGetMenuQuery(id ?? '', {
+    skip: !id
+  })
 
-  if (!cardapio) {
+  if (isLoading || !menu) {
     return <h3>Carregando...</h3>
   }
 
   return (
     <>
       <SecondHeader />
-      <Banner
-        category={cardapio.tipo}
-        image={cardapio.capa}
-        title={cardapio.titulo}
-      />
-      <PratosList pratos={cardapio.cardapio} name={cardapio.titulo} />
+      <Banner category={menu.tipo} image={menu.capa} title={menu.titulo} />
+      <SnaksList snaks={menu.cardapio} name={menu.titulo} />
     </>
   )
 }

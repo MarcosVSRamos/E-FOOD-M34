@@ -1,5 +1,6 @@
 import styled from 'styled-components'
-import { breakpoints, cores } from '../../styles'
+
+import { breakpoints, colors } from '../../styles'
 
 export const Div = styled.div`
   display: flex;
@@ -8,7 +9,7 @@ export const Div = styled.div`
   align-items: center;
   text-align: center;
   margin-top: 40px;
-  background-color: ${cores.textoSecundario};
+  background-color: ${colors.secondaryText};
 `
 
 export const Paragrafo = styled.p`

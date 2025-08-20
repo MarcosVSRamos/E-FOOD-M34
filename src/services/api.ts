@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { Prato, Restaurante } from '../pages/Home'
+import { Restaurant, Snak } from '../types'
 
 type Product = {
   id: number
@@ -36,16 +36,16 @@ export const api = createApi({
     baseUrl: 'https://ebac-fake-api.vercel.app/api/efood/'
   }),
   endpoints: (builder) => ({
-    getRestaurantes: builder.query<Restaurante[], void>({
+    getRestaurants: builder.query<Restaurant[], void>({
       query: () => 'restaurantes'
     }),
-    getBanner: builder.query<Restaurante[], string>({
+    getBanner: builder.query<Restaurant[], string>({
       query: (id) => `restaurantes/${id}`
     }),
-    getCardapio: builder.query<Restaurante, string>({
+    getMenu: builder.query<Restaurant, string>({
       query: (id) => `restaurantes/${id}`
     }),
-    getPratos: builder.query<Prato, string>({
+    getSnaks: builder.query<Snak, string>({
       query: (id) => `restaurantes/${id}`
     }),
     purchase: builder.mutation<any, PurchasePayload>({
@@ -59,9 +59,9 @@ export const api = createApi({
 })
 
 export const {
-  useGetRestaurantesQuery,
   useGetBannerQuery,
-  useGetCardapioQuery,
-  useGetPratosQuery,
+  useGetMenuQuery,
+  useGetRestaurantsQuery,
+  useGetSnaksQuery,
   usePurchaseMutation
 } = api
