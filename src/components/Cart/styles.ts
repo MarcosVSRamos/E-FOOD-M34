@@ -26,6 +26,12 @@ export const CartContent = styled.div`
   }
 `
 
+export const TextCart = styled.p`
+  color: ${cores.textoSecundario};
+  width: 290px;
+  margin: 0 auto;
+`
+
 export const SideBar = styled.aside`
   background-color: ${cores.vermelho};
   z-index: 1;
