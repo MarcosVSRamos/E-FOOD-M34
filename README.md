@@ -11,4 +11,4 @@ Principais ferramentas e linguagens utilizadas: React; JavaScript; HTML; TypeScr
 <img src="https://servidor-estatico-tawny.vercel.app/e_food_carrinho.png" />
 <br/>
 Sinta-se avontade para acessar e conhecer! <br/>
-https://e-food-37nipwrxh-marcossantosdevs-projects.vercel.app/
+[Link Versel](https://e-play-pearl.vercel.app/)
